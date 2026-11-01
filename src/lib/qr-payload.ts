@@ -1,14 +1,16 @@
-export type QrType = "url" | "text" | "wifi" | "email" | "phone" | "sms" | "whatsapp" | "vcard";
+export type QrType = "url" | "file" | "text" | "wifi" | "email" | "phone" | "sms" | "whatsapp" | "vcard" | "location";
 
 export const QR_TYPES: { id: QrType; label: string }[] = [
-  { id: "url", label: "Website" },
-  { id: "text", label: "Text" },
+  { id: "url", label: "Link" },
+  { id: "file", label: "Image / PDF" },
+  { id: "whatsapp", label: "WhatsApp" },
   { id: "wifi", label: "Wi-Fi" },
+  { id: "text", label: "Text" },
+  { id: "vcard", label: "Contact" },
   { id: "email", label: "Email" },
   { id: "phone", label: "Phone" },
   { id: "sms", label: "SMS" },
-  { id: "whatsapp", label: "WhatsApp" },
-  { id: "vcard", label: "Contact" },
+  { id: "location", label: "Location" },
 ];
 
 export type Fields = Record<string, string>;
@@ -17,7 +19,8 @@ const esc = (s: string) => s.replace(/([\\;,:"])/g, "\\$1");
 
 export function buildPayload(type: QrType, f: Fields): string {
   switch (type) {
-    case "url": {
+    case "url":
+    case "file": {
       const u = (f.url ?? "").trim();
       if (!u) return "";
       return /^[a-z]+:\/\//i.test(u) ? u : `https://${u}`;
@@ -37,6 +40,10 @@ export function buildPayload(type: QrType, f: Fields): string {
     case "whatsapp": {
       const n = (f.phone ?? "").replace(/\D/g, "");
       return n ? `https://wa.me/${n}?text=${encodeURIComponent(f.message ?? "")}` : "";
+    }
+    case "location": {
+      const q = (f.place ?? "").trim();
+      return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : "";
     }
     case "vcard":
       if (!f.name) return "";
