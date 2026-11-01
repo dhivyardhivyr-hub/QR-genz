@@ -4,7 +4,7 @@ import type { Options } from "qr-code-styling";
 import { Download, Copy, Check, Share2, Upload, Loader2, ImagePlus, X } from "lucide-react";
 import { QR_TYPES, buildPayload, type QrType, type Fields } from "@/lib/qr-payload";
 
-const FIELDS: Record<QrType, { key: string; label: string; placeholder?: string; area?: boolean }[]> = {
+const FIELDS: Record<QrType, { key: keyof Fields; label: string; placeholder?: string; area?: boolean }[]> = {
   url: [{ key: "url", label: "Any link — website, Instagram, YouTube, store, Google Form…", placeholder: "instagram.com/yourname" }],
   file: [],
   text: [{ key: "text", label: "Your text", placeholder: "Type anything…", area: true }],
@@ -62,13 +62,13 @@ const FRAMES = [
 export function QrGenerator() {
   const [type, setType] = useState<QrType>("url");
   const [fields, setFields] = useState<Fields>({ url: "" });
-  const [theme, setTheme] = useState<Theme>(THEMES[0]);
+  const [theme, setTheme] = useState<Theme>(THEMES[0]!);
   const [style, setStyle] = useState<(typeof STYLES)[number]>(STYLES[0]);
   const [frame, setFrame] = useState<(typeof FRAMES)[number]["id"]>("poster");
   const [caption, setCaption] = useState("SCAN ME");
   const [logo, setLogo] = useState<string | undefined>();
   const [copied, setCopied] = useState(false);
-  const [upload, setUpload] = useState<{ name: string; size: number; preview?: string; state: "busy" | "done" | "error"; msg?: string } | null>(null);
+  const [upload, setUpload] = useState<{ name: string; size: number; preview?: string | undefined; state: "busy" | "done" | "error"; msg?: string | undefined } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const qr = useRef<QRCodeStyling | null>(null);
   const data = useMemo(() => buildPayload(type, fields), [type, fields]);
@@ -77,7 +77,7 @@ export function QrGenerator() {
     () => ({
       width: 260, height: 260, type: "svg", margin: 6,
       data: data || "https://qrgenz.app",
-      image: logo,
+      ...(logo ? { image: logo } : {}),
       imageOptions: { margin: 4, imageSize: 0.32, hideBackgroundDots: true, crossOrigin: "anonymous" },
       qrOptions: { errorCorrectionLevel: logo ? "H" : "Q" },
       dotsOptions: { type: style.dots, gradient: { type: "linear", rotation: Math.PI / 4, colorStops: [{ offset: 0, color: theme.c1 }, { offset: 1, color: theme.c2 }] } },
