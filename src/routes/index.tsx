@@ -70,7 +70,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-        <a href="/" className="font-display text-xl font-bold">QR <span className="text-gradient">GenZ</span></a>
+        <a href="/" className="font-display text-xl font-bold">QR <span className="text-brand">GenZ</span></a>
         <nav className="flex gap-5 text-sm text-muted-foreground">
           <a href="#create" className="hover:text-foreground">Create</a>
           <a href="#faq" className="hover:text-foreground">FAQ</a>
@@ -78,11 +78,11 @@ function Index() {
       </header>
 
       <main>
-        <section className="bg-gradient-hero">
+        <section className="bg-hero">
           <div className="mx-auto max-w-6xl px-5 pb-10 pt-10 text-center md:pt-16">
             <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">100% free · No sign-up · No expiry</span>
             <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
-              Free QR Code Generator <span className="text-gradient">with style.</span>
+              Free QR Code Generator <span className="text-brand">with style.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground md:text-lg">
               Make a free QR code for any link, Wi-Fi, WhatsApp or contact in seconds. Customize it. Download it. Done.
@@ -113,7 +113,7 @@ function Index() {
             <div className="mt-10 grid gap-4 md:grid-cols-2">
               {USES.map(({ icon: I, t, d }) => (
                 <article key={t} className="flex gap-4 rounded-2xl bg-card p-6">
-                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary text-primary-foreground"><I className="h-5 w-5" /></div>
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand text-primary-foreground"><I className="h-5 w-5" /></div>
                   <div><h3 className="font-semibold">{t}</h3><p className="mt-1 text-sm text-muted-foreground">{d}</p></div>
                 </article>
               ))}
@@ -126,7 +126,7 @@ function Index() {
           <ol className="mt-8 grid gap-4 md:grid-cols-4">
             {["Pick a QR type", "Enter your content", "Choose style & color", "Download PNG or SVG"].map((s, i) => (
               <li key={s} className="rounded-2xl border p-5">
-                <span className="font-display text-3xl font-bold text-gradient">0{i + 1}</span>
+                <span className="font-display text-3xl font-bold text-brand">0{i + 1}</span>
                 <p className="mt-2 font-medium">{s}</p>
               </li>
             ))}

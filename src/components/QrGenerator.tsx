@@ -93,7 +93,7 @@ export function QrGenerator() {
             <button
               key={t.id} role="tab" aria-selected={type === t.id}
               onClick={() => { setType(t.id); setFields({}); }}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition ${type === t.id ? "bg-gradient-primary text-primary-foreground" : "bg-secondary text-foreground hover:bg-accent"}`}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${type === t.id ? "bg-brand text-primary-foreground" : "bg-secondary text-foreground hover:bg-accent"}`}
             >{t.label}</button>
           ))}
         </div>
@@ -140,7 +140,7 @@ export function QrGenerator() {
         <div ref={ref} className="rounded-2xl bg-background p-3" aria-label="QR code preview" />
         <p className="mt-3 min-h-5 max-w-full truncate text-xs text-muted-foreground">{data || "Fill in the details to create your QR"}</p>
         <div className="mt-4 grid w-full grid-cols-2 gap-2">
-          <button disabled={!data} onClick={() => download("png")} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-4 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"><Download className="h-4 w-4" />PNG</button>
+          <button disabled={!data} onClick={() => download("png")} className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"><Download className="h-4 w-4" />PNG</button>
           <button disabled={!data} onClick={() => download("svg")} className="inline-flex items-center justify-center gap-2 rounded-xl border bg-background px-4 py-3 text-sm font-semibold disabled:opacity-50"><Download className="h-4 w-4" />SVG</button>
         </div>
         <button disabled={!data} onClick={() => { navigator.clipboard.writeText(data); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
