@@ -13,7 +13,7 @@ export const QR_TYPES: { id: QrType; label: string }[] = [
   { id: "location", label: "Location" },
 ];
 
-export type Fields = Record<string, string>;
+export type Fields = Partial<Record<"url"|"text"|"ssid"|"password"|"enc"|"email"|"subject"|"body"|"phone"|"message"|"place"|"name"|"org", string>>;
 
 const esc = (s: string) => s.replace(/([\\;,:"])/g, "\\$1");
 
