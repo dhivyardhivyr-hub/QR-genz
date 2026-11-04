@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { QrGenerator } from "@/components/QrGenerator";
 import { Zap, ShieldCheck, Infinity as InfinityIcon, Palette, Wifi, Link2, MessageCircle, Contact } from "lucide-react";
 
@@ -73,7 +74,65 @@ const USES = [
 ];
 
 function Index() {
+  const [showIntro, setShowIntro] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("qrgenz-intro-seen") === "1") return;
+    setShowIntro(true);
+    const timer = window.setTimeout(() => {
+      setShowIntro(false);
+      sessionStorage.setItem("qrgenz-intro-seen", "1");
+    }, 2600);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
+    <>
+      {showIntro && (
+        <div className="qrgenz-intro" role="status" aria-label="Welcome to QR GenZ">
+          <div className="qrgenz-intro-orbit" />
+          <div className="qrgenz-intro-content">
+            <img src="/qr-genz-logo.svg" alt="QR GenZ logo" className="qrgenz-intro-logo" />
+            <div className="qrgenz-intro-name">QR <span>GENZ</span></div>
+            <p className="qrgenz-intro-tagline">SCAN · SHARE · CONNECT</p>
+            <div className="qrgenz-intro-progress"><span /></div>
+          </div>
+        </div>
+      )}
+      <style>{`
+        .qrgenz-intro {
+          position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center;
+          overflow: hidden; background: radial-gradient(circle at 50% 45%, #17104b 0%, #08051d 42%, #020208 100%);
+          animation: qrg-intro-out 0.55s ease 2.05s forwards;
+        }
+        .qrgenz-intro::before {
+          content: ""; position: absolute; width: min(82vw, 520px); aspect-ratio: 1;
+          border-radius: 50%; border: 2px solid transparent;
+          background: linear-gradient(#08051d,#08051d) padding-box, linear-gradient(120deg,#c51cff,#5b43ff,#10dfff) border-box;
+          box-shadow: 0 0 45px #682bff55, inset 0 0 45px #3420a633;
+          animation: qrg-ring-in 1s cubic-bezier(.2,.8,.2,1) both;
+        }
+        .qrgenz-intro-orbit {
+          position: absolute; width: min(92vw, 590px); aspect-ratio: 1; border-radius: 50%;
+          border: 1px solid #6e4cff55; transform: rotate(-24deg) scale(.82);
+          animation: qrg-orbit 2.2s ease-in-out infinite;
+        }
+        .qrgenz-intro-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+        .qrgenz-intro-logo { width: clamp(150px, 35vw, 230px); height: auto; filter: drop-shadow(0 0 24px #6d3dff88); animation: qrg-logo-in .8s cubic-bezier(.16,1,.3,1) both; }
+        .qrgenz-intro-name { margin-top: 14px; color: white; font: 900 clamp(34px, 8vw, 54px)/1 Arial,sans-serif; letter-spacing: -2px; animation: qrg-text-in .7s .25s both; }
+        .qrgenz-intro-name span { background: linear-gradient(90deg,#c31cff,#16d8ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .qrgenz-intro-tagline { margin-top: 13px; color: #e9e7ff; font: 700 10px/1 Arial,sans-serif; letter-spacing: .34em; animation: qrg-text-in .7s .4s both; }
+        .qrgenz-intro-progress { width: 112px; height: 3px; margin-top: 28px; overflow: hidden; border-radius: 9px; background: #ffffff20; }
+        .qrgenz-intro-progress span { display: block; width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg,#c31cff,#16d8ff); animation: qrg-progress 2.2s linear forwards; }
+        @keyframes qrg-logo-in { from { opacity: 0; transform: translateY(24px) scale(.72) rotate(-8deg); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
+        @keyframes qrg-text-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes qrg-ring-in { from { opacity: 0; transform: scale(.72) rotate(-35deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+        @keyframes qrg-orbit { 0%,100% { transform: rotate(-24deg) scale(.82); } 50% { transform: rotate(24deg) scale(.9); } }
+        @keyframes qrg-progress { to { transform: scaleX(1); } }
+        @keyframes qrg-intro-out { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+        @media (prefers-reduced-motion: reduce) { .qrgenz-intro, .qrgenz-intro * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+      `}</style>
+      <div className="min-h-screen bg-background">
     <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
         <a href="/" className="font-display text-xl font-bold">QR <span className="text-brand">GenZ</span></a>
@@ -157,6 +216,7 @@ function Index() {
           <span>© 2026 QR GenZ</span>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
