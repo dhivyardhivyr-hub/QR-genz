@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { QrGenerator } from "@/components/QrGenerator";
 import { Zap, ShieldCheck, Infinity as InfinityIcon, Palette, Wifi, Link2, MessageCircle, Contact } from "lucide-react";
 
-const TITLE = "Free QR Code Generator – No Sign-up, No Expiry | QR GenZ";
-const DESC = "Create free QR codes for links, Wi-Fi, WhatsApp, email, SMS and contacts. Custom colors and styles, PNG & SVG download. No sign-up, never expires.";
+const TITLE = "Free Custom QR Code Generator with Logo – QR GenZ";
+const DESC = "Create free custom QR codes for URLs, Wi-Fi and business cards. Add your logo, choose colors and styles, then download high-resolution PNG or SVG. No sign-up.";
+const KEYWORDS = "free qr code generator, free qr code creator, qr code maker free, make qr code free, url to qr code, website to qr code, wifi qr code generator, wi-fi qr code, business card qr code, vcard qr code, custom qr code generator, qr code maker with logo, qr code with logo, color qr code creator, stylish qr code generator, qr code design app, qr code maker app, qr code generator no sign up, static qr code generator, qr code png download, qr code svg download";
 
 const FAQ = [
   { q: "Is QR GenZ really free?", a: "Yes. QR GenZ is a 100% free QR code generator. You can create and download unlimited QR codes without signing up or paying." },
@@ -11,7 +12,12 @@ const FAQ = [
   { q: "How do I make a free QR code?", a: "Choose a type like Website or Wi-Fi, enter your details, pick a style and color, then download your QR code as PNG or SVG." },
   { q: "Can I make a Wi-Fi QR code?", a: "Yes. Enter your network name, password and security type. Guests can scan it to join your Wi-Fi without typing the password." },
   { q: "Can I use QR GenZ codes for business and print?", a: "Yes. Downloads are high resolution (1024px PNG) and SVG vector files, ideal for menus, posters, packaging and business cards, including commercial use." },
-  { q: "Is my data safe?", a: "Your QR codes are generated right in your browser. We don't store the links or text you enter." },
+  { q: "Can I add my logo to a QR code?", a: "Yes. Upload an image to place your logo in the center of your QR code. Use a clear logo and test the downloaded code before printing." },
+  { q: "Can I customize QR code colors and styles?", a: "Yes. Choose from color themes and QR patterns, add a poster frame and caption, and download your design as PNG or SVG." },
+  { q: "Does QR GenZ create dynamic QR codes?", a: "QR GenZ currently creates static QR codes. The destination or information is encoded in the QR code itself, so it does not support changing the destination after printing." },
+  { q: "Can I create a QR code for a business card?", a: "Yes. Choose the contact or vCard option and enter your name, phone number, email, company and website to create a shareable digital business card QR code." },
+  { q: "Can I scan QR codes with QR GenZ?", a: "QR GenZ is a QR code creator and download tool. It does not currently include a built-in QR code scanner." },
+  { q: "Is my data safe?", a: "QR content is generated in your browser. We do not store the links or text you enter into the QR generator. Files you choose to upload are sent to the file-upload service to create a shareable file link." },
 ];
 
 export const Route = createFileRoute("/")({
@@ -19,7 +25,7 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
-      { name: "keywords", content: "free qr code generator, qr code generator, free qr, qr code maker, wifi qr code, whatsapp qr code, custom qr code, qr code no sign up" },
+      { name: "keywords", content: KEYWORDS },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
@@ -35,7 +41,7 @@ export const Route = createFileRoute("/")({
             "@context": "https://schema.org", "@type": "WebApplication", name: "QR GenZ",
             description: DESC, applicationCategory: "UtilitiesApplication", operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            featureList: ["Free QR code generator", "Wi-Fi QR codes", "WhatsApp QR codes", "vCard QR codes", "PNG and SVG download", "No sign-up", "No expiry"],
+            featureList: ["Free static QR code generator", "URL to QR code", "Wi-Fi QR codes", "WhatsApp QR codes", "Business card and vCard QR codes", "Custom QR code colors and patterns", "Upload a center logo", "High-resolution PNG and SVG download", "No sign-up", "No expiry"],
           },
           {
             "@context": "https://schema.org", "@type": "FAQPage",
@@ -85,7 +91,7 @@ function Index() {
               Free QR Code Generator <span className="text-brand">with style.</span>
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground md:text-lg">
-              Make a free QR code for any link, Wi-Fi, WhatsApp or contact in seconds. Customize it. Download it. Done.
+              Turn a URL, Wi-Fi network, WhatsApp chat or contact into a free QR code. Add your logo, customize colors and patterns, then download a high-resolution PNG or SVG.
             </p>
           </div>
           <div id="create" className="mx-auto max-w-6xl scroll-mt-6 px-5 pb-16">
@@ -105,10 +111,9 @@ function Index() {
 
         <section className="bg-secondary">
           <div className="mx-auto max-w-6xl px-5 py-16">
-            <h2 className="text-3xl font-bold md:text-4xl">What is a free QR code?</h2>
+            <h2 className="text-3xl font-bold md:text-4xl">Free custom QR code maker for URLs, Wi-Fi and business cards</h2>
             <p className="mt-3 max-w-3xl text-muted-foreground">
-              A free QR code is a scannable square that stores a link, text, Wi-Fi login or contact details. With QR GenZ you create
-              static QR codes at no cost: the information lives inside the code, so it works on every phone camera and never expires.
+              QR GenZ is a free QR code creator for websites, Wi-Fi access and digital business cards. Create a URL to QR code in seconds, add a center logo, choose a color theme and pattern, and export the result as PNG or SVG. QR GenZ creates static QR codes: the information is stored in the code itself, so the code does not expire, but its destination cannot be edited after creation.
             </p>
             <div className="mt-10 grid gap-4 md:grid-cols-2">
               {USES.map(({ icon: I, t, d }) => (
