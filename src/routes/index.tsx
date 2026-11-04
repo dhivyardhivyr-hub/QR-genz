@@ -92,7 +92,7 @@ function Index() {
         <div className="qrgenz-intro" role="status" aria-label="Welcome to QR GenZ">
           <div className="qrgenz-intro-orbit" />
           <div className="qrgenz-intro-content">
-            <img src="/qr-genz-logo.svg" alt="QR GenZ logo" className="qrgenz-intro-logo" />
+            <img src="/qr-genz-logo.png" alt="QR GenZ logo" className="qrgenz-intro-logo" />
             <div className="qrgenz-intro-name">QR <span>GENZ</span></div>
             <p className="qrgenz-intro-tagline">SCAN · SHARE · CONNECT</p>
             <div className="qrgenz-intro-progress"><span /></div>
@@ -133,7 +133,6 @@ function Index() {
         @media (prefers-reduced-motion: reduce) { .qrgenz-intro, .qrgenz-intro * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
       `}</style>
       <div className="min-h-screen bg-background">
-    <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
         <a href="/" className="font-display text-xl font-bold">QR <span className="text-brand">GenZ</span></a>
         <nav className="flex gap-5 text-sm text-muted-foreground">
