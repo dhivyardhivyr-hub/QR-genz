@@ -133,7 +133,6 @@ function Index() {
         @media (prefers-reduced-motion: reduce) { .qrgenz-intro, .qrgenz-intro * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
       `}</style>
       <div className="min-h-screen bg-background">
-    <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
         <a href="/" className="font-display text-xl font-bold">QR <span className="text-brand">GenZ</span></a>
         <nav className="flex gap-5 text-sm text-muted-foreground">
