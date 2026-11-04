@@ -39,7 +39,7 @@ const FIELDS: Record<QrType, { key: keyof Fields; label: string; placeholder?: s
 };
 
 type Theme = { id: string; label: string; c1: string; c2: string; eye: string; bg1: string; bg2: string };
-const THEMES: Theme[] = [
+const THEMES: [Theme, ...Theme[]] = [
   { id: "violet", label: "Violet", c1: "#7057FF", c2: "#B05CFF", eye: "#4B2FE0", bg1: "#7057FF", bg2: "#C084FC" },
   { id: "sunset", label: "Sunset", c1: "#FF5F6D", c2: "#FFA94D", eye: "#E2364A", bg1: "#FF5F6D", bg2: "#FFC371" },
   { id: "ocean", label: "Ocean", c1: "#0EA5E9", c2: "#2DD4BF", eye: "#0369A1", bg1: "#0EA5E9", bg2: "#5EEAD4" },

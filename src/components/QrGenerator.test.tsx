@@ -14,7 +14,7 @@ afterEach(cleanup);
 describe("QR generation", () => {
   it("does not generate an unrelated QR for empty content", () => {
     render(<QrGenerator />);
-    expect(screen.getByRole("button", { name: "PNG", exact: true })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "PNG" })).toBeDisabled();
     expect(screen.getByLabelText("QR code preview").childElementCount).toBe(0);
   });
 
@@ -22,10 +22,10 @@ describe("QR generation", () => {
     render(<QrGenerator />);
     const input = screen.getByPlaceholderText("instagram.com/yourname");
     fireEvent.change(input, { target: { value: "https://example.com/working-qr" } });
-    await waitFor(() => expect(screen.getByRole("button", { name: "PNG", exact: true })).toBeEnabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: "PNG" })).toBeEnabled());
     expect(screen.getByLabelText("QR code preview").childElementCount).toBe(1);
     fireEvent.change(input, { target: { value: "" } });
-    await waitFor(() => expect(screen.getByRole("button", { name: "PNG", exact: true })).toBeDisabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: "PNG" })).toBeDisabled());
     expect(screen.getByLabelText("QR code preview").childElementCount).toBe(0);
   });
 });
