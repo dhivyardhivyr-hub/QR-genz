@@ -82,6 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Free QR code generator. No sign-up, no expiry." },
       { name: "author", content: "QR GenZ" },
       { name: "google-site-verification", content: "QiuGJuNUj6wtNh6fRkhVyWf4TJSO-qnoM2vTJzWSeiA" },
+      { name: "google-adsense-account", content: "ca-pub-4057458011816706" },
       { property: "og:site_name", content: "QR GenZ" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
