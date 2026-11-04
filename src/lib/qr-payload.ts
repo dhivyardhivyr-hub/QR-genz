@@ -1,8 +1,9 @@
-export type QrType = "url" | "file" | "text" | "wifi" | "email" | "phone" | "sms" | "whatsapp" | "vcard" | "location";
+export type QrType = "url" | "file" | "video" | "text" | "wifi" | "email" | "phone" | "sms" | "whatsapp" | "vcard" | "location";
 
 export const QR_TYPES: { id: QrType; label: string }[] = [
   { id: "url", label: "Link" },
   { id: "file", label: "Image / PDF" },
+  { id: "video", label: "Video" },
   { id: "whatsapp", label: "WhatsApp" },
   { id: "wifi", label: "Wi-Fi" },
   { id: "text", label: "Text" },
@@ -21,6 +22,11 @@ export function buildPayload(type: QrType, f: Fields): string {
   switch (type) {
     case "url":
     case "file": {
+      const u = (f.url ?? "").trim();
+      if (!u) return "";
+      return /^[a-z]+:\/\//i.test(u) ? u : `https://${u}`;
+    }
+    case "video": {
       const u = (f.url ?? "").trim();
       if (!u) return "";
       return /^[a-z]+:\/\//i.test(u) ? u : `https://${u}`;

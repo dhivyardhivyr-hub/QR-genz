@@ -1,0 +1,4 @@
+- [ ] Add AI style generation with preserved QR and scan-checked exports.
+- [ ] Add scanner testing before download/share.
+- [ ] Verify video uploads and QR destination.
+- [ ] Add Google verification tag, publish, verify ownership, and submit sitemap.
