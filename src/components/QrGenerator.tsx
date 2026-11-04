@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 const FIELDS: Record<QrType, { key: keyof Fields; label: string; placeholder?: string; area?: boolean }[]> = {
   url: [{ key: "url", label: "Any link — website, Instagram, YouTube, store, Google Form…", placeholder: "instagram.com/yourname" }],
   file: [],
+  video: [{ key: "url", label: "Video link", placeholder: "https://youtube.com/watch?v=…" }],
   text: [{ key: "text", label: "Your text", placeholder: "Type anything…", area: true }],
   wifi: [
     { key: "ssid", label: "Network name", placeholder: "MyWiFi" },
