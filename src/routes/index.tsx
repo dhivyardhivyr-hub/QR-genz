@@ -92,7 +92,7 @@ function Index() {
         <div className="qrgenz-intro" role="status" aria-label="Welcome to QR GenZ">
           <div className="qrgenz-intro-orbit" />
           <div className="qrgenz-intro-content">
-            <img src="/qr-genz-logo.svg" alt="QR GenZ logo" className="qrgenz-intro-logo" />
+            <img src="/qr-genz-logo.png" alt="QR GenZ logo" className="qrgenz-intro-logo" />
             <div className="qrgenz-intro-name">QR <span>GENZ</span></div>
             <p className="qrgenz-intro-tagline">SCAN · SHARE · CONNECT</p>
             <div className="qrgenz-intro-progress"><span /></div>

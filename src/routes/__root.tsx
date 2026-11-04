@@ -84,9 +84,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "google-site-verification", content: "QiuGJuNUj6wtNh6fRkhVyWf4TJSO-qnoM2vTJzWSeiA" },
       { property: "og:site_name", content: "QR GenZ" },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "/qr-genz-logo.svg" },
+      { property: "og:image", content: "/og-image.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "/qr-genz-logo.svg" },
+      { name: "twitter:image", content: "/og-image.jpg" },
     ],
     links: [
       {
@@ -95,8 +95,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" },
-      { rel: "icon", href: "/qr-genz-logo.svg", type: "image/svg+xml" },
-      { rel: "apple-touch-icon", href: "/qr-genz-logo.svg" },
+      { rel: "icon", href: "/qr-genz-logo.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,
