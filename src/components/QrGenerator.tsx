@@ -94,28 +94,54 @@ export function QrGenerator() {
 
   useEffect(() => {
     let alive = true;
-    import("qr-code-styling").then(({ default: QR }) => {
+    setReadyData("");
+    setError("");
+    if (!data) {
+      ref.current?.replaceChildren();
+      qr.current = null;
+      return;
+    }
+    import("qr-code-styling").then(async ({ default: QR }) => {
+      const next = new QR(options);
+      const raw = await next.getRawData("svg");
+      if (!raw) throw new Error("QR generation failed. Try shorter content.");
       if (!alive || !ref.current) return;
-      if (!qr.current) {
-        qr.current = new QR(options);
-        ref.current.innerHTML = "";
-        qr.current.append(ref.current);
-      } else qr.current.update(options);
+      ref.current.replaceChildren();
+      next.append(ref.current);
+      qr.current = next;
+      setReadyData(data);
+    }).catch((e: unknown) => {
+      if (alive) {
+        ref.current?.replaceChildren();
+        setError(e instanceof Error ? e.message : "Could not create your QR. Please try again.");
+      }
     });
     return () => { alive = false; };
-  }, [options]);
+  }, [options, data]);
+
+  const canExport = Boolean(data && readyData === data && !error && !exporting);
+  const runAction = async (action: () => Promise<void>) => {
+    if (!canExport) return;
+    setExporting(true);
+    try { await action(); }
+    catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Could not save your QR. Please try again.");
+    } finally { setExporting(false); }
+  };
 
   /** Render the final image (poster card or plain QR) as a PNG blob. */
   const renderPng = async (): Promise<Blob> => {
     const { default: QR } = await import("qr-code-styling");
     const size = 1024;
-    const raw = (await new QR({ ...options, type: "canvas", width: size, height: size, margin: 24 }).getRawData("png")) as Blob;
+    const raw = await new QR({ ...options, type: "canvas", width: size, height: size, margin: 64 }).getRawData("png");
+    if (!(raw instanceof Blob)) throw new Error("Could not create the QR image.");
     if (frame === "plain") return raw;
     const img = await createImageBitmap(raw);
     const W = 1200, H = 1500;
     const c = document.createElement("canvas");
     c.width = W; c.height = H;
-    const g = c.getContext("2d")!;
+    const g = c.getContext("2d");
+    if (!g) throw new Error("Your browser could not create the image.");
     const grad = g.createLinearGradient(0, 0, W, H);
     grad.addColorStop(0, theme.bg1); grad.addColorStop(1, theme.bg2);
     g.fillStyle = grad; g.fillRect(0, 0, W, H);
@@ -132,7 +158,8 @@ export function QrGenerator() {
     g.fillText(caption.slice(0, 22) || "SCAN ME", W / 2, 1290);
     g.globalAlpha = 0.85; g.font = "500 36px 'DM Sans', sans-serif";
     g.fillText("Made free with QR GenZ", W / 2, 1390);
-    return await new Promise((r) => c.toBlob((b) => r(b!), "image/png"));
+    img.close();
+    return await new Promise<Blob>((resolve, reject) => c.toBlob((b) => b ? resolve(b) : reject(new Error("Could not save the QR image.")), "image/png"));
   };
 
   const downloadPng = async () => {
@@ -143,7 +170,7 @@ export function QrGenerator() {
   };
   const downloadSvg = async () => {
     const { default: QR } = await import("qr-code-styling");
-    new QR({ ...options, width: 1024, height: 1024, margin: 24 }).download({ name: `qr-genz-${type}`, extension: "svg" });
+    await new QR({ ...options, width: 1024, height: 1024, margin: 64 }).download({ name: `qr-genz-${type}`, extension: "svg" });
   };
 
   const shareText = type === "url" || type === "file" || type === "whatsapp" || type === "location" ? `Scan my QR or open: ${data}` : "Scan my QR code — made free with QR GenZ";
@@ -152,7 +179,9 @@ export function QrGenerator() {
     const blob = await renderPng();
     const file = new File([blob], "qr-genz.png", { type: "image/png" });
     if (navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], title: "My QR code", text: shareText }).catch(() => {});
+      await navigator.share({ files: [file], title: "My QR code", text: shareText }).catch((e: unknown) => {
+        if (!(e instanceof DOMException && e.name === "AbortError")) throw e;
+      });
     } else {
       await downloadPng();
     }
@@ -300,20 +329,23 @@ export function QrGenerator() {
 
       <div className="flex min-w-0 flex-col items-center justify-center rounded-2xl bg-secondary p-5">
         <div
-          className={frame === "poster" ? "flex flex-col items-center rounded-3xl p-5 pb-4" : ""}
-          style={frame === "poster" ? { background: `linear-gradient(135deg, ${theme.bg1}, ${theme.bg2})` } : undefined}
+          className={frame === "poster" && data ? "flex w-full max-w-[324px] flex-col items-center rounded-3xl p-3 pb-4 sm:p-5" : "w-full max-w-[284px]"}
+          style={frame === "poster" && data ? { background: `linear-gradient(135deg, ${theme.bg1}, ${theme.bg2})` } : undefined}
         >
-          <div ref={ref} className="rounded-2xl bg-background p-3" aria-label="QR code preview" />
-          {frame === "poster" && (
+          <div ref={ref} className={`w-full rounded-2xl bg-background p-3 [&>svg]:h-auto [&>svg]:w-full ${data ? "" : "hidden"}`} aria-label="QR code preview" />
+          {!data && <div role="status" className="grid aspect-square w-full place-items-center rounded-2xl border border-dashed bg-background p-6 text-center text-sm text-muted-foreground">Enter your content to create a QR code</div>}
+          {frame === "poster" && data && (
             <p className="mt-3 font-display text-2xl font-bold tracking-wide text-primary-foreground">{caption || "SCAN ME"}</p>
           )}
         </div>
         <p className="mt-3 min-h-5 w-full truncate text-center text-xs text-muted-foreground">{data || "Add your link or content to create your QR"}</p>
+        {data && !error && <p role="status" className="mt-1 text-xs text-muted-foreground">{readyData === data ? "QR ready" : "Creating QR…"}</p>}
+        {error && <p role="alert" className="mt-2 text-center text-sm text-destructive">{error}</p>}
 
         <div className="mt-3 grid w-full grid-cols-2 gap-2">
-          <button disabled={!data} onClick={shareImage} className="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"><Share2 className="h-4 w-4" />Share QR image</button>
-          <button disabled={!data} onClick={downloadPng} className="inline-flex items-center justify-center gap-2 rounded-xl border bg-background px-4 py-3 text-sm font-semibold disabled:opacity-50"><Download className="h-4 w-4" />PNG</button>
-          <button disabled={!data} onClick={downloadSvg} className="inline-flex items-center justify-center gap-2 rounded-xl border bg-background px-4 py-3 text-sm font-semibold disabled:opacity-50"><Download className="h-4 w-4" />SVG</button>
+          <Button disabled={!canExport} onClick={() => runAction(shareImage)} className="col-span-2 h-auto rounded-xl bg-brand px-4 py-3 font-semibold">{exporting ? <Loader2 className="animate-spin" /> : <Share2 />}Share QR image</Button>
+          <Button variant="outline" disabled={!canExport} onClick={() => runAction(downloadPng)} className="h-auto rounded-xl px-4 py-3 font-semibold"><Download />PNG</Button>
+          <Button variant="outline" disabled={!canExport} onClick={() => runAction(downloadSvg)} className="h-auto rounded-xl px-4 py-3 font-semibold"><Download />SVG</Button>
         </div>
 
         <div className="mt-3 flex w-full flex-wrap justify-center gap-2">
