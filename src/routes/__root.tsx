@@ -81,7 +81,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "QR GenZ – Free QR Code Generator" },
       { name: "description", content: "Free QR code generator. No sign-up, no expiry." },
       { name: "author", content: "QR GenZ" },
-      { name: "google-site-verification", content: "eFcyleAQ41GU1eaSQzmByGl4xsSI0IoEJtU1qQEjgys" },
       { property: "og:site_name", content: "QR GenZ" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -102,10 +101,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// Rendered directly in <head> because HeadContent de-duplicates meta tags by name,
+// which would drop all but one verification token.
+const GOOGLE_SITE_VERIFICATION_TOKENS = [
+  "eFcyleAQ41GU1eaSQzmByGl4xsSI0IoEJtU1qQEjgys",
+  "gisIbrhYpCwE88aeFFRofmx-JKypdbHZRMcX5SoT_ZA",
+  "QiuGJuNUj6wtNh6fRkhVyWf4TJSO-qnoM2vTJzWSeiA",
+];
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {GOOGLE_SITE_VERIFICATION_TOKENS.map((token) => (
+          <meta key={token} name="google-site-verification" content={token} />
+        ))}
         <HeadContent />
       </head>
       <body>
