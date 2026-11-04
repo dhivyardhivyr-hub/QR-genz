@@ -3,6 +3,7 @@ import type QRCodeStyling from "qr-code-styling";
 import type { Options } from "qr-code-styling";
 import { Download, Copy, Check, Share2, Upload, Loader2, ImagePlus, X } from "lucide-react";
 import { QR_TYPES, buildPayload, type QrType, type Fields } from "@/lib/qr-payload";
+import { Button } from "@/components/ui/button";
 
 const FIELDS: Record<QrType, { key: keyof Fields; label: string; placeholder?: string; area?: boolean }[]> = {
   url: [{ key: "url", label: "Any link — website, Instagram, YouTube, store, Google Form…", placeholder: "instagram.com/yourname" }],
@@ -62,12 +63,15 @@ const FRAMES = [
 export function QrGenerator() {
   const [type, setType] = useState<QrType>("url");
   const [fields, setFields] = useState<Fields>({ url: "" });
-  const [theme, setTheme] = useState<Theme>(THEMES[0]!);
+  const [theme, setTheme] = useState<Theme>(THEMES[0]);
   const [style, setStyle] = useState<(typeof STYLES)[number]>(STYLES[0]);
   const [frame, setFrame] = useState<(typeof FRAMES)[number]["id"]>("poster");
   const [caption, setCaption] = useState("SCAN ME");
   const [logo, setLogo] = useState<string | undefined>();
   const [copied, setCopied] = useState(false);
+  const [readyData, setReadyData] = useState("");
+  const [error, setError] = useState("");
+  const [exporting, setExporting] = useState(false);
   const [upload, setUpload] = useState<{ name: string; size: number; preview?: string | undefined; state: "busy" | "done" | "error"; msg?: string | undefined } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const qr = useRef<QRCodeStyling | null>(null);
@@ -75,8 +79,8 @@ export function QrGenerator() {
 
   const options = useMemo<Options>(
     () => ({
-      width: 260, height: 260, type: "svg", margin: 6,
-      data: data || "https://qrgenz.app",
+      width: 260, height: 260, type: "svg", margin: 16,
+      data,
       ...(logo ? { image: logo } : {}),
       imageOptions: { margin: 4, imageSize: 0.32, hideBackgroundDots: true, crossOrigin: "anonymous" },
       qrOptions: { errorCorrectionLevel: logo ? "H" : "Q" },
